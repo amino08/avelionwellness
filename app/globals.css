@@ -1,26 +1,117 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy: #0a1628;
+  --clinical: #1d5fbf;
+  --white: #ffffff;
+  --platinum: #e8edf2;
+  --silver: #b8c3d1;
+  --slate: #cbd5e1;
+  --light-bg: #f7f9fc;
+  --text-muted: #6b7a8d;
+  --text-secondary: #4a5a6e;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-navy: var(--navy);
+  --color-clinical: var(--clinical);
+  --color-platinum: var(--platinum);
+  --color-silver: var(--silver);
+  --color-slate: var(--slate);
+  --color-light-bg: var(--light-bg);
+  --color-background: var(--white);
+  --color-foreground: var(--navy);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-cormorant);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--white);
+  color: var(--navy);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-cormorant), Georgia, "Times New Roman", serif;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background-color: var(--navy);
+  padding: 0.875rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--white);
+  transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(29, 95, 191, 0.25), 0 4px 14px rgba(10, 22, 40, 0.15);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid var(--silver);
+  background-color: var(--white);
+  padding: 0.875rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--navy);
+  transition: all 0.25s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--navy);
+  background-color: var(--light-bg);
+}
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background-color: var(--navy);
+  padding: 0.625rem 2.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--white);
+  transition: all 0.25s ease;
+}
+
+.btn-hero-primary:hover {
+  background-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(29, 95, 191, 0.22), 0 4px 14px rgba(10, 22, 40, 0.12);
+}
+
+.btn-hero-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.625rem 2.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--white);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+}
+
+.btn-hero-glass:hover {
+  border-color: var(--white);
+  background-color: var(--white);
+  color: var(--navy);
 }
