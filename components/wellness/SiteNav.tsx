@@ -63,44 +63,6 @@ function CareNavLink({ active }: { active?: boolean }) {
   );
 }
 
-function CareConciergeLink() {
-  return (
-    <a
-      href={CARE.url}
-      className="concierge-float"
-      aria-label="Visit Avelion Care — physician-guided care"
-    >
-      <span className="concierge-float-icon">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden
-        >
-          <path
-            d="M12 3C9.5 3 7.5 5 7.5 7.5c0 2.2 1.4 4.1 3.4 4.8L9 21h6l-1.9-8.7c2-0.7 3.4-2.6 3.4-4.8C16.5 5 14.5 3 12 3Z"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M10 11h4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
-      </span>
-      <span className="hidden min-w-0 flex-col sm:flex">
-        <span className="concierge-float-label">Avelion Care</span>
-        <span className="concierge-float-sub">Physician-guided care</span>
-      </span>
-      <span className="concierge-float-label sm:hidden">Avelion Care</span>
-    </a>
-  );
-}
-
 export function SiteNav({ variant = "landing" }: SiteNavProps) {
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
@@ -109,14 +71,32 @@ export function SiteNav({ variant = "landing" }: SiteNavProps) {
     pathname.startsWith("/wellness-store") ||
     pathname.startsWith("/checkout");
   const isCareLanding = pathname === "/";
+  const isLandingCompact = variant === "landing" && isCareLanding;
 
   const header = (
     <header className="glass-nav pointer-events-auto w-full max-w-5xl rounded-xl">
-      <div className="flex items-center justify-between gap-3 px-3.5 py-2 sm:gap-4 sm:px-5 sm:py-2.5">
-        <Link href="/" className="group flex min-w-0 items-center gap-2.5 sm:gap-3">
-          <AvelionLogo size={24} />
+      <div
+        className={`flex items-center justify-between ${
+          isLandingCompact
+            ? "gap-2 px-2.5 py-1 sm:gap-2.5 sm:px-3.5 sm:py-1.5"
+            : "gap-3 px-3.5 py-2 sm:gap-4 sm:px-5 sm:py-2.5"
+        }`}
+      >
+        <Link
+          href="/"
+          className={`group flex min-w-0 items-center ${
+            isLandingCompact ? "gap-1.5 sm:gap-2" : "gap-2.5 sm:gap-3"
+          }`}
+        >
+          <AvelionLogo size={isLandingCompact ? 20 : 24} />
           <div className="flex min-w-0 flex-col">
-            <span className="font-serif text-[0.8125rem] font-semibold tracking-[0.14em] text-navy sm:text-sm">
+            <span
+              className={`font-serif tracking-[0.14em] text-navy ${
+                isLandingCompact
+                  ? "text-xs font-medium sm:text-[0.8125rem]"
+                  : "text-[0.8125rem] font-semibold sm:text-sm"
+              }`}
+            >
               AVELION
             </span>
             {isStore && (
@@ -157,7 +137,11 @@ export function SiteNav({ variant = "landing" }: SiteNavProps) {
 
   return (
     <>
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3.5 pt-3 sm:px-5 sm:pt-3.5">
+      <div
+        className={`pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center ${
+          isLandingCompact ? "px-2.5 pt-2 sm:px-3.5 sm:pt-2.5" : "px-3.5 pt-3 sm:px-5 sm:pt-3.5"
+        }`}
+      >
         {prefersReducedMotion ? (
           header
         ) : (
@@ -171,7 +155,6 @@ export function SiteNav({ variant = "landing" }: SiteNavProps) {
           </motion.div>
         )}
       </div>
-      {isStore && <CareConciergeLink />}
     </>
   );
 }

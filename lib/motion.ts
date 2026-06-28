@@ -1,5 +1,11 @@
 import type { Transition, Variants } from "framer-motion";
 
+export const motionSpring: Transition = {
+  type: "spring",
+  stiffness: 320,
+  damping: 28,
+};
+
 export const motionEase = [0.16, 1, 0.3, 1] as const;
 
 export const motionTransition: Transition = {

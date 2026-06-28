@@ -1,87 +1,213 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type Transition,
+} from "framer-motion";
+import { usePathname } from "next/navigation";
 import { CARE } from "@/lib/constants";
-import { motionTransition } from "@/lib/motion";
+import { motionSpring } from "@/lib/motion";
 
-function ConciergeIcon() {
+function ConciergeMark({ compact = false }: { compact?: boolean }) {
   return (
     <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
+      width={compact ? 14 : 18}
+      height={compact ? 20 : 26}
+      viewBox="0 0 18 26"
       fill="none"
       aria-hidden
-      className="shrink-0"
+      className="concierge-widget-mark shrink-0"
     >
       <path
-        d="M12 3C9.5 3 7.5 5 7.5 7.5c0 2.2 1.4 4.1 3.4 4.8L9 21h6l-1.9-8.7c2-0.7 3.4-2.6 3.4-4.8C16.5 5 14.5 3 12 3Z"
+        d="M9 1.5v23"
         stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
+        strokeWidth="1"
+        strokeLinecap="round"
+      />
+      <circle
+        cx="9"
+        cy="7.5"
+        r="2.25"
+        stroke="currentColor"
+        strokeWidth="1"
       />
       <path
-        d="M10 11h4"
+        d="M5.5 7.5h7"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1"
         strokeLinecap="round"
+      />
+      <path
+        d="M9 12v9"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+        opacity="0.45"
       />
     </svg>
   );
 }
 
+function ConciergeBody() {
+  return (
+    <>
+      <ConciergeMark />
+      <span className="concierge-widget-copy">
+        <span className="concierge-widget-eyebrow">Clinical Concierge</span>
+        <span className="concierge-widget-title">Physician-Guided Care</span>
+      </span>
+      <span className="concierge-widget-cta" aria-hidden>
+        Visit <span className="concierge-widget-arrow">→</span>
+      </span>
+    </>
+  );
+}
+
+const slideTransition: Transition = {
+  type: "spring",
+  stiffness: 280,
+  damping: 26,
+};
+
+const floatTransition: Transition = {
+  duration: 3.6,
+  repeat: Infinity,
+  ease: "easeInOut",
+  repeatDelay: 2.4,
+};
+
 export function CareConcierge() {
-  const [visible, setVisible] = useState(false);
+  const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
+  const [visible, setVisible] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState(false);
+
+  const showOnPage =
+    pathname.startsWith("/wellness-store") ||
+    pathname.startsWith("/checkout");
 
   useEffect(() => {
+    if (!showOnPage) return;
+
     const onScroll = () => {
-      setVisible(window.scrollY > 320);
+      const scrollable =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const threshold =
+        scrollable > 0 ? scrollable * 0.2 : window.innerHeight * 0.2;
+      setVisible(window.scrollY >= threshold);
     };
 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [showOnPage]);
+
+  if (!showOnPage) return null;
+
+  const slideIn = prefersReducedMotion
+    ? { opacity: 1, x: 0, y: 0 }
+    : { opacity: 1, x: 0, y: 0 };
+
+  const slideOut = prefersReducedMotion
+    ? undefined
+    : { opacity: 0, x: 28, y: 10 };
+
+  const slideInitial = prefersReducedMotion
+    ? false
+    : { opacity: 0, x: 40, y: 16 };
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={prefersReducedMotion ? undefined : { opacity: 0, y: 10 }}
-          transition={motionTransition}
-          className="fixed bottom-5 right-4 z-40 sm:bottom-6 sm:right-6"
+          key="care-concierge"
+          className="concierge-widget-portal"
+          initial={slideInitial}
+          animate={slideIn}
+          exit={slideOut}
+          transition={prefersReducedMotion ? { duration: 0 } : slideTransition}
         >
-          {/* Mobile — compact button */}
-          <a
-            href={CARE.url}
-            className="concierge-pill concierge-pill-compact flex h-12 w-12 items-center justify-center rounded-full sm:hidden"
-            aria-label="Visit Avelion Care — physician-guided care"
+          {/* Desktop */}
+          <motion.div
+            className="concierge-widget-desktop-wrap"
+            animate={
+              prefersReducedMotion ? undefined : { y: [0, -3, 0] }
+            }
+            transition={prefersReducedMotion ? undefined : floatTransition}
           >
-            <ConciergeIcon />
-          </a>
+            <motion.a
+              href={CARE.url}
+              className="concierge-widget concierge-widget-desktop"
+              aria-label="Visit Avelion Care — Clinical Concierge, Physician-Guided Care"
+              whileHover={
+                prefersReducedMotion
+                  ? undefined
+                  : { scale: 1.02, transition: motionSpring }
+              }
+              whileTap={prefersReducedMotion ? undefined : { scale: 0.995 }}
+            >
+              <ConciergeBody />
+            </motion.a>
+          </motion.div>
 
-          {/* Desktop — expandable pill */}
-          <a
-            href={CARE.url}
-            className="concierge-pill group hidden items-center overflow-hidden rounded-full sm:flex"
-            aria-label="Visit Avelion Care — physician-guided care"
-          >
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center text-white">
-              <ConciergeIcon />
-            </span>
-            <span className="concierge-pill-content flex max-w-0 flex-col overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300 ease-out group-hover:max-w-[240px] group-hover:pr-5 group-hover:opacity-100">
-              <span className="type-caption-sm !text-white/70">
-                Need Physician-Guided Care?
-              </span>
-              <span className="text-sm font-medium text-white">
-                Visit Avelion Care
-              </span>
-            </span>
-          </a>
+          {/* Mobile */}
+          <div key={pathname} className="concierge-widget-mobile">
+            <AnimatePresence mode="wait" initial={false}>
+              {mobileExpanded ? (
+                <motion.a
+                  key="expanded"
+                  href={CARE.url}
+                  className="concierge-widget concierge-widget-expanded"
+                  aria-label="Visit Avelion Care — Clinical Concierge, Physician-Guided Care"
+                  initial={
+                    prefersReducedMotion
+                      ? false
+                      : { opacity: 0, scale: 0.94, y: 8 }
+                  }
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={
+                    prefersReducedMotion
+                      ? undefined
+                      : { opacity: 0, scale: 0.96, y: 6 }
+                  }
+                  transition={slideTransition}
+                  whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+                >
+                  <ConciergeBody />
+                </motion.a>
+              ) : (
+                <motion.button
+                  key="collapsed"
+                  type="button"
+                  className="concierge-widget concierge-widget-collapsed"
+                  aria-label="Open Clinical Concierge"
+                  aria-expanded={false}
+                  onClick={() => setMobileExpanded(true)}
+                  initial={
+                    prefersReducedMotion
+                      ? false
+                      : { opacity: 0, scale: 0.92 }
+                  }
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={
+                    prefersReducedMotion
+                      ? undefined
+                      : { opacity: 0, scale: 0.94 }
+                  }
+                  transition={slideTransition}
+                  whileTap={prefersReducedMotion ? undefined : { scale: 0.97 }}
+                >
+                  <ConciergeMark compact />
+                  <span className="concierge-widget-collapsed-label">
+                    Clinical Concierge
+                  </span>
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
