@@ -44,7 +44,7 @@ export function HomeFooter() {
           human consumption. Not evaluated by the FDA.
         </p>
 
-        <p className="type-caption-sm mt-6 text-center">
+        <p className="type-caption-sm mt-6 text-center" suppressHydrationWarning>
           © {new Date().getFullYear()} Avelion. All rights reserved.
         </p>
       </div>

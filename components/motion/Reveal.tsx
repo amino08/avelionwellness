@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
+import { useMounted } from "@/lib/use-mounted";
 import { motionEase } from "@/lib/motion";
 
 interface RevealProps {
@@ -17,9 +18,9 @@ export function Reveal({
   delay = 0,
   once = true,
 }: RevealProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const mounted = useMounted();
 
-  if (prefersReducedMotion) {
+  if (!mounted) {
     return <div className={className}>{children}</div>;
   }
 
@@ -47,9 +48,9 @@ export function StaggerReveal({
   className,
   once = true,
 }: StaggerRevealProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const mounted = useMounted();
 
-  if (prefersReducedMotion) {
+  if (!mounted) {
     return <div className={className}>{children}</div>;
   }
 
@@ -78,9 +79,9 @@ export function StaggerItem({
   children: ReactNode;
   className?: string;
 }) {
-  const prefersReducedMotion = useReducedMotion();
+  const mounted = useMounted();
 
-  if (prefersReducedMotion) {
+  if (!mounted) {
     return <div className={className}>{children}</div>;
   }
 

@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { useMounted } from "@/lib/use-mounted";
 import { buttonHover, buttonTap, motionTransitionFast } from "@/lib/motion";
 
 interface MotionButtonProps {
@@ -10,9 +11,10 @@ interface MotionButtonProps {
 }
 
 export function MotionButtonWrap({ children, className }: MotionButtonProps) {
+  const mounted = useMounted();
   const prefersReducedMotion = useReducedMotion();
 
-  if (prefersReducedMotion) {
+  if (!mounted || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 

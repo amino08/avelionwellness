@@ -10,6 +10,7 @@ import {
 import { usePathname } from "next/navigation";
 import { CARE } from "@/lib/constants";
 import { motionSpring } from "@/lib/motion";
+import { useMounted } from "@/lib/use-mounted";
 
 function ConciergeMark({ compact = false }: { compact?: boolean }) {
   return (
@@ -81,6 +82,7 @@ const floatTransition: Transition = {
 
 export function CareConcierge() {
   const pathname = usePathname();
+  const mounted = useMounted();
   const prefersReducedMotion = useReducedMotion();
   const [visible, setVisible] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(false);
@@ -90,7 +92,7 @@ export function CareConcierge() {
     pathname.startsWith("/checkout");
 
   useEffect(() => {
-    if (!showOnPage) return;
+    if (!mounted || !showOnPage) return;
 
     const onScroll = () => {
       const scrollable =
@@ -103,21 +105,19 @@ export function CareConcierge() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [showOnPage]);
+  }, [mounted, showOnPage]);
 
-  if (!showOnPage) return null;
-
-  const slideIn = prefersReducedMotion
-    ? { opacity: 1, x: 0, y: 0 }
-    : { opacity: 1, x: 0, y: 0 };
-
-  const slideOut = prefersReducedMotion
-    ? undefined
-    : { opacity: 0, x: 28, y: 10 };
+  if (!mounted || !showOnPage) {
+    return null;
+  }
 
   const slideInitial = prefersReducedMotion
     ? false
     : { opacity: 0, x: 40, y: 16 };
+
+  const slideOut = prefersReducedMotion
+    ? undefined
+    : { opacity: 0, x: 28, y: 10 };
 
   return (
     <AnimatePresence>
@@ -126,11 +126,10 @@ export function CareConcierge() {
           key="care-concierge"
           className="concierge-widget-portal"
           initial={slideInitial}
-          animate={slideIn}
+          animate={{ opacity: 1, x: 0, y: 0 }}
           exit={slideOut}
           transition={prefersReducedMotion ? { duration: 0 } : slideTransition}
         >
-          {/* Desktop */}
           <motion.div
             className="concierge-widget-desktop-wrap"
             animate={
@@ -153,8 +152,7 @@ export function CareConcierge() {
             </motion.a>
           </motion.div>
 
-          {/* Mobile */}
-          <div key={pathname} className="concierge-widget-mobile">
+          <div className="concierge-widget-mobile">
             <AnimatePresence mode="wait" initial={false}>
               {mobileExpanded ? (
                 <motion.a

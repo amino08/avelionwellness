@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import type { AvelionProduct } from "@/lib/avelion-products";
 import { useCart } from "@/contexts/cart-context";
 import { cardHover, motionTransitionFast } from "@/lib/motion";
+import { useMounted } from "@/lib/use-mounted";
 import { MotionButtonWrap } from "@/components/motion/MotionButton";
 import { ProductImage } from "./ProductImage";
 
@@ -14,7 +15,9 @@ interface ProductCardProps {
 
 export function ProductCard({ product, onViewDetails }: ProductCardProps) {
   const { addItem } = useCart();
+  const mounted = useMounted();
   const prefersReducedMotion = useReducedMotion();
+  const animate = mounted && !prefersReducedMotion;
 
   const showResearchBadge = product.badge === "Research Use Only";
 
@@ -22,18 +25,11 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
     addItem(product);
   };
 
-  const motionProps = prefersReducedMotion
-    ? {}
-    : {
-        whileHover: cardHover,
-        transition: motionTransitionFast,
-      };
+  const cardClassName =
+    "group flex h-auto flex-col overflow-visible rounded-[28px] border border-[var(--border-soft)] bg-white p-3 shadow-[var(--shadow-sm)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lg)] sm:p-4 md:flex-row md:items-stretch md:gap-5";
 
-  return (
-    <motion.article
-      {...motionProps}
-      className="group flex h-auto flex-col overflow-visible rounded-[28px] border border-[var(--border-soft)] bg-white p-3 shadow-[var(--shadow-sm)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lg)] sm:p-4 md:flex-row md:items-stretch md:gap-5"
-    >
+  const cardContent = (
+    <>
       <div className="flex min-h-[180px] shrink-0 items-center justify-center rounded-[22px] border border-[var(--border-soft)] bg-white p-3 sm:min-h-[200px] sm:p-4 md:w-[40%] md:min-w-[200px] lg:min-w-[240px]">
         <ProductImage product={product} size="compact" showStage={false} clean />
       </div>
@@ -82,6 +78,20 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
           </MotionButtonWrap>
         </div>
       </div>
-    </motion.article>
+    </>
   );
+
+  if (animate) {
+    return (
+      <motion.article
+        className={cardClassName}
+        whileHover={cardHover}
+        transition={motionTransitionFast}
+      >
+        {cardContent}
+      </motion.article>
+    );
+  }
+
+  return <article className={cardClassName}>{cardContent}</article>;
 }

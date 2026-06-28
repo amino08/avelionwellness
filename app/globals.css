@@ -371,7 +371,17 @@ body {
   height: 1px;
   border-radius: 9999px;
   background: rgba(var(--clinical-rgb), 0.5);
+  transform: scaleX(0);
   transform-origin: center;
+  opacity: 0;
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link-active-bar.is-active {
+  transform: scaleX(1);
+  opacity: 1;
 }
 
 .hero-overlay-left {

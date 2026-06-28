@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { CARE } from "@/lib/constants";
 import { navReveal } from "@/lib/motion";
+import { useMounted } from "@/lib/use-mounted";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { AvelionLogo } from "./AvelionLogo";
 import { CartNavButton } from "./CartNavButton";
@@ -32,14 +33,9 @@ function NavLink({
       }`}
     >
       {label}
-      <motion.span
-        className="nav-link-active-bar"
-        initial={false}
-        animate={{
-          scaleX: active ? 1 : 0,
-          opacity: active ? 1 : 0,
-        }}
-        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+      <span
+        className={`nav-link-active-bar ${active ? "is-active" : ""}`}
+        aria-hidden
       />
     </Link>
   );
@@ -56,15 +52,17 @@ function CareNavLink({ active }: { active?: boolean }) {
       }`}
     >
       Care
-      {active && (
-        <span className="nav-link-active-bar scale-x-100 opacity-100" />
-      )}
+      <span
+        className={`nav-link-active-bar ${active ? "is-active" : ""}`}
+        aria-hidden
+      />
     </a>
   );
 }
 
 export function SiteNav({ variant = "landing" }: SiteNavProps) {
   const pathname = usePathname();
+  const mounted = useMounted();
   const prefersReducedMotion = useReducedMotion();
   const isStore =
     variant === "store" ||
@@ -135,26 +133,27 @@ export function SiteNav({ variant = "landing" }: SiteNavProps) {
     </header>
   );
 
-  return (
-    <>
-      <div
-        className={`pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center ${
-          isLandingCompact ? "px-2.5 pt-2 sm:px-3.5 sm:pt-2.5" : "px-3.5 pt-3 sm:px-5 sm:pt-3.5"
-        }`}
+  const animatedHeader =
+    mounted && !prefersReducedMotion ? (
+      <motion.div
+        className="pointer-events-auto w-full max-w-5xl"
+        initial="hidden"
+        animate="visible"
+        variants={navReveal}
       >
-        {prefersReducedMotion ? (
-          header
-        ) : (
-          <motion.div
-            className="pointer-events-auto w-full max-w-5xl"
-            initial="hidden"
-            animate="visible"
-            variants={navReveal}
-          >
-            {header}
-          </motion.div>
-        )}
-      </div>
-    </>
+        {header}
+      </motion.div>
+    ) : (
+      <div className="pointer-events-auto w-full max-w-5xl">{header}</div>
+    );
+
+  return (
+    <div
+      className={`pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center ${
+        isLandingCompact ? "px-2.5 pt-2 sm:px-3.5 sm:pt-2.5" : "px-3.5 pt-3 sm:px-5 sm:pt-3.5"
+      }`}
+    >
+      {animatedHeader}
+    </div>
   );
 }

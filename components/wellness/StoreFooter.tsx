@@ -54,7 +54,7 @@ export function StoreFooter() {
         </div>
 
         <div className="mt-12 flex flex-col items-center gap-2 border-t border-[var(--border-soft)] pt-8 sm:flex-row sm:justify-between">
-          <p className="type-caption-sm">
+          <p className="type-caption-sm" suppressHydrationWarning>
             © {new Date().getFullYear()} {SITE.name}
           </p>
           <p className="type-caption-sm">
