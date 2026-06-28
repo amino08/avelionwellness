@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { SiteNav } from "@/components/wellness/SiteNav";
 import { StoreFooter } from "@/components/wellness/StoreFooter";
 import { HomeHero } from "@/components/landing/HomeHero";
+import { CARE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
@@ -26,16 +28,12 @@ export default function Home() {
       <main className="flex-1">
         <HomeHero />
 
-        <section className="border-t border-platinum bg-light-bg">
-          <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-20 text-center sm:flex-row sm:justify-between sm:text-left">
-            <div className="max-w-lg space-y-3">
-              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-silver">
-                Avelion Wellness
-              </p>
-              <h2 className="text-2xl font-semibold text-navy sm:text-3xl">
-                Premium research products
-              </h2>
-              <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+        <section className="border-t border-[var(--border-soft)] bg-surface-1">
+          <div className="mx-auto flex max-w-7xl flex-col items-center gap-10 px-6 py-24 sm:flex-row sm:justify-between sm:py-28">
+            <div className="max-w-lg text-center sm:text-left">
+              <Eyebrow>Avelion Wellness</Eyebrow>
+              <h2 className="type-section">Premium research products</h2>
+              <p className="type-body mt-4">
                 A separate research catalog with clean presentation and
                 pharmaceutical-grade standards. Laboratory research use only.
               </p>
@@ -43,6 +41,22 @@ export default function Home() {
             <Link href="/wellness-store" className="btn-secondary shrink-0">
               View Wellness Store
             </Link>
+          </div>
+        </section>
+
+        <section className="border-t border-[var(--border-soft)] bg-white">
+          <div className="mx-auto flex max-w-7xl flex-col items-center gap-10 px-6 py-24 sm:flex-row sm:justify-between sm:py-28">
+            <div className="max-w-lg text-center sm:text-left">
+              <Eyebrow>{CARE.name}</Eyebrow>
+              <h2 className="type-section">Physician-guided healthcare</h2>
+              <p className="type-body mt-4">
+                Elevated clinical care with modern technology and a premium
+                patient experience. Visit the Avelion Care site to get started.
+              </p>
+            </div>
+            <a href={CARE.url} className="btn-primary shrink-0">
+              Visit Avelion Care
+            </a>
           </div>
         </section>
       </main>

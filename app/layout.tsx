@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
+import { AppProviders } from "@/components/providers/AppProviders";
 import {
   createMetadata,
   organizationJsonLd,
@@ -78,7 +79,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }

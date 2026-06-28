@@ -44,15 +44,14 @@ export function StoreHero() {
         />
       </motion.div>
 
-      {/* Left readability gradient */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-r from-[rgba(10,22,40,0.94)] via-[rgba(10,22,40,0.62)] to-transparent lg:from-[rgba(10,22,40,0.92)] lg:via-[rgba(10,22,40,0.48)] lg:to-transparent"
+        className="hero-overlay-left absolute inset-0"
       />
       {/* Bottom depth */}
       <div
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[rgba(10,22,40,0.55)] to-transparent"
+        className="hero-overlay-bottom absolute inset-x-0 bottom-0 h-40"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-24 sm:px-6 sm:pb-20 sm:pt-28 lg:pb-24 lg:pt-32">

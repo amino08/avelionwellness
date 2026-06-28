@@ -7,3 +7,8 @@ export const SITE = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://avelionwellness.com",
   email: "hello@avelionwellness.com",
 } as const;
+
+export const CARE = {
+  name: "Avelion Care",
+  url: "https://www.avelioncare.com",
+} as const;

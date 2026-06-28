@@ -16,7 +16,7 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #07101E 0%, #0A1628 50%, #07101E 100%)",
+          background: "linear-gradient(135deg, #0D1E33 0%, #13233B 50%, #10243D 100%)",
           position: "relative",
         }}
       >
@@ -25,7 +25,7 @@ export default function OpenGraphImage() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(circle at 30% 40%, rgba(29, 95, 191, 0.28) 0%, transparent 50%)",
+              "radial-gradient(circle at 30% 40%, rgba(47, 111, 228, 0.28) 0%, transparent 50%)",
           }}
         />
         <div
@@ -33,7 +33,7 @@ export default function OpenGraphImage() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(circle at 70% 60%, rgba(184, 195, 209, 0.18) 0%, transparent 50%)",
+              "radial-gradient(circle at 70% 60%, rgba(139, 154, 171, 0.18) 0%, transparent 50%)",
           }}
         />
         <div
@@ -48,7 +48,7 @@ export default function OpenGraphImage() {
             style={{
               fontSize: 18,
               letterSpacing: "0.3em",
-              color: "#B8C3D1",
+              color: "#8B9AAB",
               marginBottom: 24,
               textTransform: "uppercase",
             }}
@@ -69,7 +69,7 @@ export default function OpenGraphImage() {
           <p
             style={{
               fontSize: 36,
-              color: "#E8EDF2",
+              color: "#E3EAF3",
               marginTop: 20,
               fontWeight: 400,
             }}
@@ -79,7 +79,7 @@ export default function OpenGraphImage() {
           <p
             style={{
               fontSize: 22,
-              color: "#B8C3D1",
+              color: "#8B9AAB",
               marginTop: 28,
               fontWeight: 400,
             }}

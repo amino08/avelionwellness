@@ -8,7 +8,7 @@ export function AvelionLogo({ size = 28 }: { size?: number }) {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
-      <path d="M8 34L20 6L32 34H26L20 18L14 34H8Z" fill="#0A1628" />
+      <path d="M8 34L20 6L32 34H26L20 18L14 34H8Z" fill="var(--navy)" />
       <path
         d="M20 6L26 20L32 34H26L20 22L14 34H8L20 6Z"
         fill="url(#avelion-silver)"
@@ -16,9 +16,9 @@ export function AvelionLogo({ size = 28 }: { size?: number }) {
       />
       <defs>
         <linearGradient id="avelion-silver" x1="14" y1="6" x2="32" y2="34">
-          <stop stopColor="#B8C3D1" />
-          <stop offset="0.5" stopColor="#E8EDF2" />
-          <stop offset="1" stopColor="#CBD5E1" />
+          <stop stopColor="#8B9AAB" />
+          <stop offset="0.5" stopColor="#E3EAF3" />
+          <stop offset="1" stopColor="#C5D0DE" />
         </linearGradient>
       </defs>
     </svg>

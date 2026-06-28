@@ -16,6 +16,8 @@ interface ProductImageProps {
   product: Pick<AvelionProduct, "name" | "strength" | "format">;
   size?: ProductImageSize;
   showStage?: boolean;
+  dual?: boolean;
+  clean?: boolean;
   className?: string;
 }
 
@@ -24,53 +26,73 @@ const IMAGE_SIZES: Record<
   { width: number; height: number; maxHeight: string; maxWidth: string }
 > = {
   compact: {
-    width: 224,
-    height: 308,
-    maxHeight: "max-h-[13.25rem]",
-    maxWidth: "max-w-[95%]",
+    width: 180,
+    height: 248,
+    maxHeight: "max-h-[9.5rem] sm:max-h-[10.5rem]",
+    maxWidth: "max-w-full",
   },
   default: {
     width: 280,
     height: 392,
     maxHeight: "max-h-[19.5rem]",
-    maxWidth: "max-w-[95%]",
+    maxWidth: "max-w-[88%]",
   },
   large: {
     width: 364,
     height: 476,
-    maxHeight: "max-h-[25rem]",
-    maxWidth: "max-w-[92%]",
+    maxHeight: "max-h-[26rem]",
+    maxWidth: "max-w-[85%]",
   },
 };
 
 const STAGE_HEIGHTS: Record<ProductImageSize, string> = {
-  compact: "h-64 sm:h-[17.5rem]",
+  compact: "h-[17rem] sm:h-[18.5rem]",
   default: "h-72 sm:h-80",
-  large: "h-96 sm:h-[28rem]",
+  large: "h-[22rem] sm:h-[28rem]",
 };
 
 export function ProductImage({
   product,
   size = "default",
   showStage = true,
+  dual = false,
+  clean = false,
   className = "",
 }: ProductImageProps) {
   const src = getProductImageSrc(product.format);
   const alt = `${product.name} ${product.strength} — Avelion Wellness research product`;
   const dims = IMAGE_SIZES[size];
+  const shadowClass = clean ? "" : "product-image-shadow";
 
-  const image = (
-    <div className="relative flex items-end justify-center">
-      <div
-        aria-hidden
-        className="absolute bottom-1 left-1/2 h-4 w-[72%] -translate-x-1/2 rounded-full bg-[rgba(10,22,40,0.05)] blur-lg"
+  const image = dual ? (
+    <div className="relative flex w-full items-end justify-center gap-2 transition-transform duration-500 ease-out group-hover:scale-[1.02] sm:gap-3">
+      {!clean && <div className="product-float-shadow" aria-hidden />}
+      <Image
+        src={PRODUCT_IMAGE_PATHS.vial}
+        alt={product.format === "vial" ? alt : `${product.name} — peptide vial`}
+        width={dims.width}
+        height={dims.height}
+        className={`relative z-10 max-h-[11rem] max-w-[46%] w-auto object-contain object-bottom sm:max-h-[12rem] ${shadowClass}`}
       />
+      <Image
+        src={PRODUCT_IMAGE_PATHS.oral}
+        alt={product.format === "oral" ? alt : `${product.name} — oral bottle`}
+        width={dims.width}
+        height={dims.height}
+        className={`relative z-10 max-h-[11rem] max-w-[46%] w-auto object-contain object-bottom sm:max-h-[12rem] ${shadowClass}`}
+      />
+    </div>
+  ) : (
+    <div
+      className={`relative flex w-full items-center justify-center ${clean ? "" : "transition-transform duration-500 ease-out group-hover:scale-[1.02]"}`}
+    >
+      {!clean && <div className="product-float-shadow" aria-hidden />}
       <Image
         src={src}
         alt={alt}
         width={dims.width}
         height={dims.height}
-        className={`relative z-10 ${dims.maxHeight} ${dims.maxWidth} w-auto object-contain object-center`}
+        className={`relative z-10 ${dims.maxHeight} ${dims.maxWidth} w-auto object-contain object-center ${shadowClass}`}
         priority={size === "large"}
       />
     </div>
@@ -78,21 +100,19 @@ export function ProductImage({
 
   if (!showStage) {
     return (
-      <div className={`flex items-center justify-center ${className}`}>
+      <div className={`flex w-full items-center justify-center ${className}`}>
         {image}
       </div>
     );
   }
 
-  return (
-    <div
-      className={`relative overflow-hidden rounded-2xl border border-platinum bg-[#F8FAFC] ${STAGE_HEIGHTS[size]} ${className}`}
-    >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-[#F8FAFC] to-[#EEF2F6]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.98)_0%,rgba(248,250,252,0.55)_42%,transparent_72%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_85%,rgba(203,213,225,0.18)_0%,transparent_58%)]" />
+  const stageClass = clean
+    ? "border border-[var(--border-soft)] bg-white"
+    : "product-stage group";
 
-      <div className="relative z-10 flex h-full w-full items-center justify-center px-3 py-7 sm:px-4 sm:py-8">
+  return (
+    <div className={`${stageClass} ${STAGE_HEIGHTS[size]} ${className}`}>
+      <div className="relative z-10 flex h-full w-full items-center justify-center px-4 py-8 sm:px-6 sm:py-10">
         {image}
       </div>
     </div>

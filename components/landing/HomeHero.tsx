@@ -1,30 +1,64 @@
+"use client";
+
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+import { CARE } from "@/lib/constants";
+import { MotionButtonWrap } from "@/components/motion/MotionButton";
+import { MotionEyebrow } from "@/components/ui/Eyebrow";
+import { fadeUp, staggerContainer } from "@/lib/motion";
 
 export function HomeHero() {
-  return (
-    <section className="relative overflow-hidden bg-white">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(29,95,191,0.04),transparent_55%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(232,237,242,0.5),transparent_50%)]" />
+  const prefersReducedMotion = useReducedMotion();
 
-      <div className="relative mx-auto flex max-w-7xl flex-col items-center px-6 py-28 text-center sm:py-36 lg:items-start lg:text-left">
-        <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.2em] text-silver">
-          Avelion
-        </p>
-        <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-navy sm:text-5xl lg:text-6xl">
-          Avelion Care
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
-          Physician-guided care with elevated standards, modern technology,
-          and a premium clinical experience.
-        </p>
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <button type="button" className="btn-primary">
-            Get Started
-          </button>
-          <Link href="/wellness-store" className="btn-secondary">
-            Explore Wellness
-          </Link>
-        </div>
+  const motionProps = prefersReducedMotion
+    ? {}
+    : {
+        initial: "hidden" as const,
+        animate: "visible" as const,
+        variants: staggerContainer,
+      };
+
+  return (
+    <section className="relative overflow-hidden bg-surface-1 pt-28 sm:pt-32">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,rgba(47,111,228,0.06)_0%,transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(245,248,252,0.85)_0%,transparent_45%)]" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--border-soft)] to-transparent" />
+
+      <div className="relative mx-auto flex max-w-6xl flex-col items-center px-6 pb-24 pt-8 text-center sm:pb-32 lg:items-start lg:pb-36 lg:text-left">
+        <motion.div
+          {...motionProps}
+          className="flex w-full flex-col items-center lg:items-start"
+        >
+          <MotionEyebrow variants={fadeUp}>Physician-Guided Care</MotionEyebrow>
+          <motion.h1
+            variants={fadeUp}
+            className="type-hero max-w-3xl"
+          >
+            {CARE.name}
+          </motion.h1>
+          <motion.p
+            variants={fadeUp}
+            className="type-body-lg mt-8 max-w-xl"
+          >
+            Physician-guided care with elevated standards, modern technology,
+            and a premium clinical experience.
+          </motion.p>
+          <motion.div
+            variants={fadeUp}
+            className="mt-12 flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
+          >
+            <MotionButtonWrap className="w-full sm:w-auto">
+              <a href={CARE.url} className="btn-primary w-full sm:w-auto">
+                Get Started
+              </a>
+            </MotionButtonWrap>
+            <MotionButtonWrap className="w-full sm:w-auto">
+              <Link href="/wellness-store" className="btn-secondary w-full sm:w-auto">
+                Explore Wellness
+              </Link>
+            </MotionButtonWrap>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
